@@ -1,0 +1,66 @@
+generator client {
+    provider = "prisma-client"
+    output   = "../src/generated/prisma"
+}
+
+datasource db {
+    provider = "postgresql"
+}
+
+model User {
+    id        Int      @id @default(autoincrement())
+    name      String
+    email     String   @unique
+    password  String
+    createdAt DateTime @default(now())
+
+    enrollments Enrollment[]
+    attendance  Attendance[]
+}
+
+model Course {
+    id        Int      @id @default(autoincrement())
+    name      String
+    code      String   @unique
+    teacher   String
+    room      String
+    startTime String
+    endTime   String
+
+    enrollments Enrollment[]
+    attendance  Attendance[]
+    assignments Assignment[]
+}
+
+model Enrollment {
+    id       Int @id @default(autoincrement())
+    userId   Int
+    courseId Int
+
+    user   User   @relation(fields: [userId], references: [id])
+    course Course @relation(fields: [courseId], references: [id])
+
+    @@unique([userId, courseId])
+}
+
+model Attendance {
+    id       Int      @id @default(autoincrement())
+    userId   Int
+    courseId Int
+    present  Boolean
+    date     DateTime @default(now())
+
+    user   User   @relation(fields: [userId], references: [id])
+    course Course @relation(fields: [courseId], references: [id])
+}
+
+model Assignment {
+    id          Int      @id @default(autoincrement())
+    courseId    Int
+    title       String
+    description String?
+    duedate     DateTime
+    completed   Boolean  @default(false)
+
+    course Course @relation(fields: [courseId], references: [id])
+}
