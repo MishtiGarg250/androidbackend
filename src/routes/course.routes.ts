@@ -4,12 +4,13 @@ import {
     getCourses,
     getCourseById,
 } from "../controllers/course.controller.js";
-import {authMiddleware} from "../"
+import { authMiddleware } from "../middleware/auth.middleware.js";
+// import {authMiddleware} from "../middleware/auth.middleware.js"
 
 const router = Router();
 
-router.get("/", getCourses);
+router.get("/", authMiddleware, getCourses);
 
-router.get("/:id", getCourseById);
+router.get("/:id", authMiddleware, getCourseById);
 
 export default router;
