@@ -4,6 +4,7 @@ import {
     getCourses,
     getCourseById,
 } from "../controllers/course.controller.js";
+import {authMiddleware} from "../"
 
 const router = Router();
 

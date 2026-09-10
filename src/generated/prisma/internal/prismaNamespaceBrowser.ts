@@ -55,7 +55,8 @@ export const ModelName = {
   Course: 'Course',
   Enrollment: 'Enrollment',
   Attendance: 'Attendance',
-  Assignment: 'Assignment'
+  Assignment: 'Assignment',
+  AssignmentProgress: 'AssignmentProgress'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -126,11 +127,21 @@ export const AssignmentScalarFieldEnum = {
   courseId: 'courseId',
   title: 'title',
   description: 'description',
-  duedate: 'duedate',
-  completed: 'completed'
+  duedate: 'duedate'
 } as const
 
 export type AssignmentScalarFieldEnum = (typeof AssignmentScalarFieldEnum)[keyof typeof AssignmentScalarFieldEnum]
+
+
+export const AssignmentProgressScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  assignmentId: 'assignmentId',
+  completed: 'completed',
+  completedAt: 'completedAt'
+} as const
+
+export type AssignmentProgressScalarFieldEnum = (typeof AssignmentProgressScalarFieldEnum)[keyof typeof AssignmentProgressScalarFieldEnum]
 
 
 export const SortOrder = {

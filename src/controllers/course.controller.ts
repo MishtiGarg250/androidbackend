@@ -1,19 +1,32 @@
 import type { Request, Response } from "express";
 import { prisma } from "../config/database.js";
-
+import {AuthenticatedRequest} from "../middleware/auth.middleware.js"
 
 // GET /api/courses
 export const getCourses = async (
-    _req: Request,
+    req: AuthenticatedRequest,
     res: Response
 ) => {
 
     try {
-
+        const userId = Number(req.userId);
+        if(!userId){
+            return res.status(401).json({
+                success:false,
+                message:"Unauthorized"
+            })
+        }
         const courses = await prisma.course.findMany({
-            orderBy: {
-                startTime: "asc",
-            },
+            where:{
+                enrollments:{
+                    some:{
+                        userId
+                    }
+                },
+                orderBy:{
+                    startTime:"asc"
+                }
+            }
         });
 
         res.json({

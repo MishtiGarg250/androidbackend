@@ -42,3 +42,8 @@ export type Attendance = Prisma.AttendanceModel
  * 
  */
 export type Assignment = Prisma.AssignmentModel
+/**
+ * Model AssignmentProgress
+ * 
+ */
+export type AssignmentProgress = Prisma.AssignmentProgressModel

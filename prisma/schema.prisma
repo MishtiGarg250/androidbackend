@@ -1,68 +1,80 @@
 generator client {
-    provider = "prisma-client"
-    output   = "../src/generated/prisma"
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
-    provider = "postgresql"
+  provider = "postgresql"
 }
 
 model User {
-    id        Int      @id @default(autoincrement())
-    name      String
-    email     String   @unique
-    password  String
-    createdAt DateTime @default(now())
-    rollNo    String?  @unique
-    branch    String?
-    semester  Int?
-    enrollments Enrollment[]
-    attendance  Attendance[]
+  id                 Int                  @id @default(autoincrement())
+  name               String
+  email              String               @unique
+  password           String
+  createdAt          DateTime             @default(now())
+  rollNo             String?              @unique
+  branch             String?
+  semester           Int?
+  enrollments        Enrollment[]
+  attendance         Attendance[]
+  assignmentProgress AssignmentProgress[]
 }
 
 model Course {
-    id        Int      @id @default(autoincrement())
-    name      String
-    code      String   @unique
-    teacher   String
-    room      String
-    startTime String
-    endTime   String
+  id        Int    @id @default(autoincrement())
+  name      String
+  code      String @unique
+  teacher   String
+  room      String
+  startTime String
+  endTime   String
 
-    enrollments Enrollment[]
-    attendance  Attendance[]
-    assignments Assignment[]
+  enrollments Enrollment[]
+  attendance  Attendance[]
+  assignments Assignment[]
 }
 
 model Enrollment {
-    id       Int @id @default(autoincrement())
-    userId   Int
-    courseId Int
+  id       Int @id @default(autoincrement())
+  userId   Int
+  courseId Int
 
-    user   User   @relation(fields: [userId], references: [id])
-    course Course @relation(fields: [courseId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
+  course Course @relation(fields: [courseId], references: [id])
 
-    @@unique([userId, courseId])
+  @@unique([userId, courseId])
 }
 
 model Attendance {
-    id       Int      @id @default(autoincrement())
-    userId   Int
-    courseId Int
-    present  Boolean
-    date     DateTime @default(now())
+  id       Int      @id @default(autoincrement())
+  userId   Int
+  courseId Int
+  present  Boolean
+  date     DateTime @default(now())
 
-    user   User   @relation(fields: [userId], references: [id])
-    course Course @relation(fields: [courseId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 }
 
 model Assignment {
-    id          Int      @id @default(autoincrement())
-    courseId    Int
-    title       String
-    description String?
-    duedate     DateTime
-    completed   Boolean  @default(false)
+  id          Int                  @id @default(autoincrement())
+  courseId    Int
+  title       String
+  description String?
+  duedate     DateTime
+  progress    AssignmentProgress[]
+  course      Course               @relation(fields: [courseId], references: [id])
+}
 
-    course Course @relation(fields: [courseId], references: [id])
+model AssignmentProgress {
+  id           Int        @id @default(autoincrement())
+  userId       Int
+  assignmentId Int
+  completed    Boolean    @default(false)
+  completedAt  DateTime?
+  user         User       @relation(fields: [userId], references: [id])
+  assignment   Assignment @relation(fields: [assignmentId], references: [id])
+
+  @@unique([userId, assignmentId])
 }
