@@ -42,7 +42,7 @@ export const register = async(
                 password:hashedPassword,
                 rollNo,
                 branch,
-                semester
+                semester: semester !== undefined && semester !== null ? Number(semester) : undefined
             }
         });
         return res.status(201).json({

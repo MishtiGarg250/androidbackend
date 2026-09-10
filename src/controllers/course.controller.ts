@@ -22,10 +22,10 @@ export const getCourses = async (
                     some:{
                         userId
                     }
-                },
-                orderBy:{
-                    startTime:"asc"
                 }
+            },
+            orderBy:{
+                startTime:"asc"
             }
         });
 
