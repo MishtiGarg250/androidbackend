@@ -21,7 +21,7 @@ async function startServer() {
 
 
         // Start Express server
-        app.listen(PORT, () => {
+        app.listen(5000, '0.0.0.0',() => {
 
             console.log(
                 `CampusHub API running on port ${PORT}`

@@ -28,10 +28,12 @@ export type AggregateUser = {
 
 export type UserAvgAggregateOutputType = {
   id: number | null
+  semester: number | null
 }
 
 export type UserSumAggregateOutputType = {
   id: number | null
+  semester: number | null
 }
 
 export type UserMinAggregateOutputType = {
@@ -40,6 +42,9 @@ export type UserMinAggregateOutputType = {
   email: string | null
   password: string | null
   createdAt: Date | null
+  rollNo: string | null
+  branch: string | null
+  semester: number | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -48,6 +53,9 @@ export type UserMaxAggregateOutputType = {
   email: string | null
   password: string | null
   createdAt: Date | null
+  rollNo: string | null
+  branch: string | null
+  semester: number | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -56,16 +64,21 @@ export type UserCountAggregateOutputType = {
   email: number
   password: number
   createdAt: number
+  rollNo: number
+  branch: number
+  semester: number
   _all: number
 }
 
 
 export type UserAvgAggregateInputType = {
   id?: true
+  semester?: true
 }
 
 export type UserSumAggregateInputType = {
   id?: true
+  semester?: true
 }
 
 export type UserMinAggregateInputType = {
@@ -74,6 +87,9 @@ export type UserMinAggregateInputType = {
   email?: true
   password?: true
   createdAt?: true
+  rollNo?: true
+  branch?: true
+  semester?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -82,6 +98,9 @@ export type UserMaxAggregateInputType = {
   email?: true
   password?: true
   createdAt?: true
+  rollNo?: true
+  branch?: true
+  semester?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -90,6 +109,9 @@ export type UserCountAggregateInputType = {
   email?: true
   password?: true
   createdAt?: true
+  rollNo?: true
+  branch?: true
+  semester?: true
   _all?: true
 }
 
@@ -185,6 +207,9 @@ export type UserGroupByOutputType = {
   email: string
   password: string
   createdAt: Date
+  rollNo: string | null
+  branch: string | null
+  semester: number | null
   _count: UserCountAggregateOutputType | null
   _avg: UserAvgAggregateOutputType | null
   _sum: UserSumAggregateOutputType | null
@@ -216,6 +241,9 @@ export type UserWhereInput = {
   email?: Prisma.StringFilter<"User"> | string
   password?: Prisma.StringFilter<"User"> | string
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  rollNo?: Prisma.StringNullableFilter<"User"> | string | null
+  branch?: Prisma.StringNullableFilter<"User"> | string | null
+  semester?: Prisma.IntNullableFilter<"User"> | number | null
   enrollments?: Prisma.EnrollmentListRelationFilter
   attendance?: Prisma.AttendanceListRelationFilter
 }
@@ -226,6 +254,9 @@ export type UserOrderByWithRelationInput = {
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  rollNo?: Prisma.SortOrderInput | Prisma.SortOrder
+  branch?: Prisma.SortOrderInput | Prisma.SortOrder
+  semester?: Prisma.SortOrderInput | Prisma.SortOrder
   enrollments?: Prisma.EnrollmentOrderByRelationAggregateInput
   attendance?: Prisma.AttendanceOrderByRelationAggregateInput
 }
@@ -233,15 +264,18 @@ export type UserOrderByWithRelationInput = {
 export type UserWhereUniqueInput = Prisma.AtLeast<{
   id?: number
   email?: string
+  rollNo?: string
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   name?: Prisma.StringFilter<"User"> | string
   password?: Prisma.StringFilter<"User"> | string
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  branch?: Prisma.StringNullableFilter<"User"> | string | null
+  semester?: Prisma.IntNullableFilter<"User"> | number | null
   enrollments?: Prisma.EnrollmentListRelationFilter
   attendance?: Prisma.AttendanceListRelationFilter
-}, "id" | "email">
+}, "id" | "email" | "rollNo">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -249,6 +283,9 @@ export type UserOrderByWithAggregationInput = {
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  rollNo?: Prisma.SortOrderInput | Prisma.SortOrder
+  branch?: Prisma.SortOrderInput | Prisma.SortOrder
+  semester?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _avg?: Prisma.UserAvgOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
@@ -265,6 +302,9 @@ export type UserScalarWhereWithAggregatesInput = {
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
   password?: Prisma.StringWithAggregatesFilter<"User"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
+  rollNo?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  branch?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  semester?: Prisma.IntNullableWithAggregatesFilter<"User"> | number | null
 }
 
 export type UserCreateInput = {
@@ -272,6 +312,9 @@ export type UserCreateInput = {
   email: string
   password: string
   createdAt?: Date | string
+  rollNo?: string | null
+  branch?: string | null
+  semester?: number | null
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
   attendance?: Prisma.AttendanceCreateNestedManyWithoutUserInput
 }
@@ -282,6 +325,9 @@ export type UserUncheckedCreateInput = {
   email: string
   password: string
   createdAt?: Date | string
+  rollNo?: string | null
+  branch?: string | null
+  semester?: number | null
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
   attendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUserInput
 }
@@ -291,6 +337,9 @@ export type UserUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rollNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branch?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  semester?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
   attendance?: Prisma.AttendanceUpdateManyWithoutUserNestedInput
 }
@@ -301,6 +350,9 @@ export type UserUncheckedUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rollNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branch?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  semester?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
   attendance?: Prisma.AttendanceUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -311,6 +363,9 @@ export type UserCreateManyInput = {
   email: string
   password: string
   createdAt?: Date | string
+  rollNo?: string | null
+  branch?: string | null
+  semester?: number | null
 }
 
 export type UserUpdateManyMutationInput = {
@@ -318,6 +373,9 @@ export type UserUpdateManyMutationInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rollNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branch?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  semester?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type UserUncheckedUpdateManyInput = {
@@ -326,6 +384,9 @@ export type UserUncheckedUpdateManyInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rollNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branch?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  semester?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type UserCountOrderByAggregateInput = {
@@ -334,10 +395,14 @@ export type UserCountOrderByAggregateInput = {
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  rollNo?: Prisma.SortOrder
+  branch?: Prisma.SortOrder
+  semester?: Prisma.SortOrder
 }
 
 export type UserAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  semester?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -346,6 +411,9 @@ export type UserMaxOrderByAggregateInput = {
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  rollNo?: Prisma.SortOrder
+  branch?: Prisma.SortOrder
+  semester?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -354,10 +422,14 @@ export type UserMinOrderByAggregateInput = {
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  rollNo?: Prisma.SortOrder
+  branch?: Prisma.SortOrder
+  semester?: Prisma.SortOrder
 }
 
 export type UserSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  semester?: Prisma.SortOrder
 }
 
 export type UserScalarRelationFilter = {
@@ -371,6 +443,18 @@ export type StringFieldUpdateOperationsInput = {
 
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
+}
+
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
+}
+
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type IntFieldUpdateOperationsInput = {
@@ -414,6 +498,9 @@ export type UserCreateWithoutEnrollmentsInput = {
   email: string
   password: string
   createdAt?: Date | string
+  rollNo?: string | null
+  branch?: string | null
+  semester?: number | null
   attendance?: Prisma.AttendanceCreateNestedManyWithoutUserInput
 }
 
@@ -423,6 +510,9 @@ export type UserUncheckedCreateWithoutEnrollmentsInput = {
   email: string
   password: string
   createdAt?: Date | string
+  rollNo?: string | null
+  branch?: string | null
+  semester?: number | null
   attendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -447,6 +537,9 @@ export type UserUpdateWithoutEnrollmentsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rollNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branch?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  semester?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   attendance?: Prisma.AttendanceUpdateManyWithoutUserNestedInput
 }
 
@@ -456,6 +549,9 @@ export type UserUncheckedUpdateWithoutEnrollmentsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rollNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branch?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  semester?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   attendance?: Prisma.AttendanceUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -464,6 +560,9 @@ export type UserCreateWithoutAttendanceInput = {
   email: string
   password: string
   createdAt?: Date | string
+  rollNo?: string | null
+  branch?: string | null
+  semester?: number | null
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
 }
 
@@ -473,6 +572,9 @@ export type UserUncheckedCreateWithoutAttendanceInput = {
   email: string
   password: string
   createdAt?: Date | string
+  rollNo?: string | null
+  branch?: string | null
+  semester?: number | null
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -497,6 +599,9 @@ export type UserUpdateWithoutAttendanceInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rollNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branch?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  semester?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
 }
 
@@ -506,6 +611,9 @@ export type UserUncheckedUpdateWithoutAttendanceInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rollNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branch?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  semester?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -555,6 +663,9 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   email?: boolean
   password?: boolean
   createdAt?: boolean
+  rollNo?: boolean
+  branch?: boolean
+  semester?: boolean
   enrollments?: boolean | Prisma.User$enrollmentsArgs<ExtArgs>
   attendance?: boolean | Prisma.User$attendanceArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -566,6 +677,9 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   email?: boolean
   password?: boolean
   createdAt?: boolean
+  rollNo?: boolean
+  branch?: boolean
+  semester?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -574,6 +688,9 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   email?: boolean
   password?: boolean
   createdAt?: boolean
+  rollNo?: boolean
+  branch?: boolean
+  semester?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -582,9 +699,12 @@ export type UserSelectScalar = {
   email?: boolean
   password?: boolean
   createdAt?: boolean
+  rollNo?: boolean
+  branch?: boolean
+  semester?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "password" | "createdAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "password" | "createdAt" | "rollNo" | "branch" | "semester", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   enrollments?: boolean | Prisma.User$enrollmentsArgs<ExtArgs>
   attendance?: boolean | Prisma.User$attendanceArgs<ExtArgs>
@@ -605,6 +725,9 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     email: string
     password: string
     createdAt: Date
+    rollNo: string | null
+    branch: string | null
+    semester: number | null
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -1035,6 +1158,9 @@ export interface UserFieldRefs {
   readonly email: Prisma.FieldRef<"User", 'String'>
   readonly password: Prisma.FieldRef<"User", 'String'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly rollNo: Prisma.FieldRef<"User", 'String'>
+  readonly branch: Prisma.FieldRef<"User", 'String'>
+  readonly semester: Prisma.FieldRef<"User", 'Int'>
 }
     
 

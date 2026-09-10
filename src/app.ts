@@ -3,7 +3,7 @@ import cors from "cors";
 
 import courseRoutes from "./routes/course.routes.js";
 import assignmentRoutes from "./routes/assignment.routes.js";
-
+import authRoutes from "./routes/authRoutes.js";
 import { errorMiddleware } from "./middleware/error.middleware.js";
 
 const app = express();
@@ -60,6 +60,11 @@ app.use(
     assignmentRoutes
 );
 
+
+app.use(
+    "/api/auth",
+    authRoutes
+);
 
 // -------------------------
 // Error Handler

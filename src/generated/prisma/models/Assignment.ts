@@ -428,10 +428,6 @@ export type AssignmentUncheckedUpdateManyWithoutCourseNestedInput = {
   deleteMany?: Prisma.AssignmentScalarWhereInput | Prisma.AssignmentScalarWhereInput[]
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
 export type AssignmentCreateWithoutCourseInput = {
   title: string
   description?: string | null
