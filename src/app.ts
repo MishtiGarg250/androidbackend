@@ -5,6 +5,10 @@ import courseRoutes from "./routes/course.routes.js";
 import assignmentRoutes from "./routes/assignment.routes.js";
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/user.routes.js";
+import timetableRoutes from "./routes/timetable.routes.js";
+import adminRoutes from "./routes/admin.routes.js";
+import attendanceRoutes from "./routes/attendance.routes.js";
+import dashboardRoutes from "./routes/dashboard.routes.js";
 import { errorMiddleware } from "./middleware/error.middleware.js";
 
 const app = express();
@@ -68,6 +72,13 @@ app.use(
 );
 
 app.use("/api/users", userRoutes);
+
+app.use("/api/timetable", timetableRoutes);
+
+app.use("/api/admin", adminRoutes);
+
+app.use("/api/attendance", attendanceRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 
 // -------------------------
 // Error Handler

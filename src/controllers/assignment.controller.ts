@@ -1,212 +1,63 @@
-import type { Response } from "express";
+import type { Request, Response } from "express";
 import { prisma } from "../config/database.js";
-import type { AuthenticatedRequest } from "../middleware/auth.middleware.js";
 
-// GET /api/assignments
-// Returns assignments only for courses the logged-in user is enrolled in
-export const getAssignments = async (
-    req: AuthenticatedRequest,
-    res: Response
-) => {
-    try {
-        const userId = Number(req.userId);
-
-        if (!req.userId || Number.isNaN(userId)) {
-            return res.status(401).json({
-                success: false,
-                message: "Unauthorized",
-            });
-        }
-
-        const assignments = await prisma.assignment.findMany({
-            where: {
-                course: {
-                    enrollments: {
-                        some: {
-                            userId: userId,
-                        },
-                    },
-                },
-            },
-
-            include: {
-                course: true,
-                progress:{
-                    where:{
-                        userId:userId
-                    }
-                }
-            },
-
-            orderBy: {
-                duedate: "asc",
-            },
-        });
-
-        return res.status(200).json({
-            success: true,
-            data: assignments,
-        });
-
-    } catch (error) {
-        console.error("Get assignments error:", error);
-
-        return res.status(500).json({
-            success: false,
-            message: "Failed to fetch assignments",
-        });
-    }
+const parseAssignmentId = (value: string | string[]): number | null => {
+  if (typeof value !== "string") return null;
+  const id = Number(value);
+  return Number.isInteger(id) && id > 0 ? id : null;
 };
 
+const getAccessibleAssignment = async (userId: number, assignmentId: number) =>
+  prisma.assignment.findFirst({
+    where: { id: assignmentId, course: { enrollments: { some: { userId } } } },
+    select: { id: true, title: true, description: true, duedate: true, courseId: true },
+  });
 
-// GET /api/assignments/:id
-// Returns an assignment only if the logged-in user
-// is enrolled in the assignment's course
-export const getAssignmentById = async (
-    req: AuthenticatedRequest,
-    res: Response
-) => {
-    try {
-        const userId = Number(req.userId);
-
-        if (!req.userId || Number.isNaN(userId)) {
-            return res.status(401).json({
-                success: false,
-                message: "Unauthorized",
-            });
-        }
-
-        const id = Number(req.params.id);
-
-        if (Number.isNaN(id)) {
-            return res.status(400).json({
-                success: false,
-                message: "Invalid assignment ID",
-            });
-        }
-
-        const assignment = await prisma.assignment.findFirst({
-            where: {
-                id: id,
-
-                course: {
-                    enrollments: {
-                        some: {
-                            userId: userId,
-                        },
-                    },
-                },
-            },
-
-            include: {
-                course: true,
-            },
-        });
-
-        if (!assignment) {
-            return res.status(404).json({
-                success: false,
-                message: "Assignment not found or you are not enrolled in this course",
-            });
-        }
-
-        return res.status(200).json({
-            success: true,
-            data: assignment,
-        });
-
-    } catch (error) {
-        console.error("Get assignment by ID error:", error);
-
-        return res.status(500).json({
-            success: false,
-            message: "Failed to fetch assignment",
-        });
-    }
+const withProgress = async (userId: number, assignments: { id: number; title: string; description: string | null; duedate: Date; courseId: number }[]) => {
+  const [courses, progress] = await Promise.all([
+    prisma.course.findMany({ where: { id: { in: assignments.map((assignment) => assignment.courseId) } }, select: { id: true, name: true, code: true } }),
+    prisma.assignmentProgress.findMany({ where: { userId, assignmentId: { in: assignments.map((assignment) => assignment.id) } }, select: { assignmentId: true, completed: true } }),
+  ]);
+  const courseById = new Map(courses.map((course) => [course.id, course]));
+  const progressByAssignmentId = new Map(progress.map((item) => [item.assignmentId, item.completed]));
+  return assignments.flatMap((assignment) => {
+    const course = courseById.get(assignment.courseId);
+    return course ? [{ id: assignment.id, title: assignment.title, description: assignment.description, duedate: assignment.duedate, course, completed: progressByAssignmentId.get(assignment.id) ?? false }] : [];
+  });
 };
 
-export const completeAssignment = async(
-    req: AuthenticatedRequest,
-    res: Response
-)=>{
-    try{
-        const userId = Number(req.userId);
-        if(!req.userId || Number.isNaN(userId)){
-            return res.status(401).json({
-                success:false,
-                message:"Unauthorized"
-            });
-        }
+export const getAssignments = async (req: Request, res: Response) => {
+  const assignments = await prisma.assignment.findMany({
+    where: { course: { enrollments: { some: { userId: req.userId! } } } },
+    select: { id: true, title: true, description: true, duedate: true, courseId: true },
+    orderBy: { duedate: "asc" },
+  });
+  return res.json({ success: true, data: await withProgress(req.userId!, assignments) });
+};
 
-        const assignmentId = Number(req.params.id);
-        if(Number.isNaN(assignmentId)){
-            return res.status(400).json({
-                success:false,
-                message:"Invalid assignment ID",
-            });
-        }
+export const getAssignmentById = async (req: Request, res: Response) => {
+  const id = parseAssignmentId(req.params.id);
+  if (!id) return res.status(400).json({ success: false, message: "Invalid assignment ID" });
+  const assignment = await getAccessibleAssignment(req.userId!, id);
+  if (!assignment) return res.status(404).json({ success: false, message: "Assignment not found or you are not enrolled in this course" });
+  const [result] = await withProgress(req.userId!, [assignment]);
+  return res.json({ success: true, data: result });
+};
 
-        const assignment = await prisma.assignment.findUnique({
-            where:{
-                id:assignmentId
-            },
-            include:{
-                course:{
-                    include:{
-                        enrollments:{
-                            where:{
-                                userId:userId,
-                            }
-                        }
-                    }
-                }
-            }
-        });
+const setAssignmentCompletion = async (req: Request, res: Response, completed: boolean) => {
+  const assignmentId = parseAssignmentId(req.params.id);
+  if (!assignmentId) return res.status(400).json({ success: false, message: "Invalid assignment ID" });
+  const assignment = await getAccessibleAssignment(req.userId!, assignmentId);
+  if (!assignment) return res.status(404).json({ success: false, message: "Assignment not found or you are not enrolled in this course" });
 
-        if(!assignment){
-            return res.status(404).json({
-                success:false,
-                message:"Assignment not found",
-            });
-        }
+  const progress = await prisma.assignmentProgress.upsert({
+    where: { userId_assignmentId: { userId: req.userId!, assignmentId } },
+    create: { userId: req.userId!, assignmentId, completed, completedAt: completed ? new Date() : null },
+    update: { completed, completedAt: completed ? new Date() : null },
+    select: { id: true, assignmentId: true, completed: true, completedAt: true },
+  });
+  return res.json({ success: true, message: completed ? "Assignment marked as completed" : "Assignment marked as incomplete", data: progress });
+};
 
-        if(assignment.course.enrollments.length === 0){
-            return res.status(403).json({
-                success:false,
-                message:"You are not enrolled in this course",
-            })
-        }
-
-        const progress = await prisma.assignmentProgress.upsert({
-            where:{
-                userId_assignmentId:{
-                    userId:userId,
-                    assignmentId:assignmentId
-                }
-            },
-
-            update:{
-                completed:true,
-                completedAt:new Date()
-            },
-            create:{
-                userId:userId,
-                assignmentId:assignmentId,
-                completed:true,
-                completedAt:new Date()
-            }
-        });
-
-        return res.status(200).json({
-            success:true,
-            message:"Assignment marked as completed",
-            data: progress,
-        })
-    }catch(error){
-        console.error("Complete assignment error:", error);
-        return res.status(500).json({
-            success:false,
-            message:"Failed to complete assignment",
-        });
-    }
-}
+export const completeAssignment = (req: Request, res: Response) => setAssignmentCompletion(req, res, true);
+export const incompleteAssignment = (req: Request, res: Response) => setAssignmentCompletion(req, res, false);

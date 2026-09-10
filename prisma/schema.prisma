@@ -29,6 +29,7 @@ model User {
   enrollments        Enrollment[]
   attendance         Attendance[]
   assignmentProgress AssignmentProgress[]
+  facultyCourses     FacultyCourse[]
 }
 
 model Course {
@@ -41,6 +42,20 @@ model Course {
   enrollments Enrollment[]
   assignments Assignment[]
   attendance  Attendance[]
+  faculty     FacultyCourse[]
+}
+
+model FacultyCourse {
+  id        Int @id @default(autoincrement())
+  facultyId Int
+  courseId  Int
+
+  faculty User   @relation(fields: [facultyId], references: [id], onDelete: Cascade)
+  course  Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([facultyId, courseId])
+  @@index([facultyId])
+  @@index([courseId])
 }
 
 model CourseOffering {
