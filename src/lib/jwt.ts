@@ -1,21 +1,18 @@
-import jwt, { JwtPayload } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
-const JWT_SECRET = process.env.JWT_SECRET || "campushub_super_secret_key_change_this";
+const JWT_SECRET = process.env.JWT_SECRET;
 
-if(!JWT_SECRET){
-    throw new Error("JT_SECRET is not defined");
-}
+if (!JWT_SECRET) throw new Error("JWT_SECRET is not defined");
 
-export interface JtPayload{
-    userId: string;
-}
+export interface JwtTokenPayload { userId: number; }
 
-export function generateToken(userId: string){
-    return jwt.sign({userId,},JWT_SECRET,{expiresIn:"7d"})
-}
+export const generateToken = (userId: number): string =>
+  jwt.sign({ userId }, JWT_SECRET, { expiresIn: "7d" });
 
-export function verifyToken(token:string): JwtPayload{
-    return jwt.verify(
-        token,JWT_SECRET
-    ) as JwtPayload
-}
+export const verifyToken = (token: string): JwtTokenPayload => {
+  const payload = jwt.verify(token, JWT_SECRET);
+  if (typeof payload !== "object" || payload === null || typeof payload.userId !== "number" || !Number.isInteger(payload.userId)) {
+    throw new Error("Invalid token payload");
+  }
+  return { userId: payload.userId };
+};

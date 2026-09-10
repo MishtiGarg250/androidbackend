@@ -456,10 +456,6 @@ export type AttendanceUncheckedUpdateManyWithoutCourseNestedInput = {
   deleteMany?: Prisma.AttendanceScalarWhereInput | Prisma.AttendanceScalarWhereInput[]
 }
 
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
-}
-
 export type AttendanceCreateWithoutUserInput = {
   present: boolean
   date?: Date | string

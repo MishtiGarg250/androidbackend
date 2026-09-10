@@ -4,6 +4,7 @@ import cors from "cors";
 import courseRoutes from "./routes/course.routes.js";
 import assignmentRoutes from "./routes/assignment.routes.js";
 import authRoutes from "./routes/authRoutes.js";
+import userRoutes from "./routes/user.routes.js";
 import { errorMiddleware } from "./middleware/error.middleware.js";
 
 const app = express();
@@ -65,6 +66,8 @@ app.use(
     "/api/auth",
     authRoutes
 );
+
+app.use("/api/users", userRoutes);
 
 // -------------------------
 // Error Handler

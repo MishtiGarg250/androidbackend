@@ -220,8 +220,8 @@ export type AssignmentWhereInput = {
   title?: Prisma.StringFilter<"Assignment"> | string
   description?: Prisma.StringNullableFilter<"Assignment"> | string | null
   duedate?: Prisma.DateTimeFilter<"Assignment"> | Date | string
-  progress?: Prisma.AssignmentProgressListRelationFilter
   course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
+  progress?: Prisma.AssignmentProgressListRelationFilter
 }
 
 export type AssignmentOrderByWithRelationInput = {
@@ -230,8 +230,8 @@ export type AssignmentOrderByWithRelationInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   duedate?: Prisma.SortOrder
-  progress?: Prisma.AssignmentProgressOrderByRelationAggregateInput
   course?: Prisma.CourseOrderByWithRelationInput
+  progress?: Prisma.AssignmentProgressOrderByRelationAggregateInput
 }
 
 export type AssignmentWhereUniqueInput = Prisma.AtLeast<{
@@ -243,8 +243,8 @@ export type AssignmentWhereUniqueInput = Prisma.AtLeast<{
   title?: Prisma.StringFilter<"Assignment"> | string
   description?: Prisma.StringNullableFilter<"Assignment"> | string | null
   duedate?: Prisma.DateTimeFilter<"Assignment"> | Date | string
-  progress?: Prisma.AssignmentProgressListRelationFilter
   course?: Prisma.XOR<Prisma.CourseScalarRelationFilter, Prisma.CourseWhereInput>
+  progress?: Prisma.AssignmentProgressListRelationFilter
 }, "id">
 
 export type AssignmentOrderByWithAggregationInput = {
@@ -275,8 +275,8 @@ export type AssignmentCreateInput = {
   title: string
   description?: string | null
   duedate: Date | string
-  progress?: Prisma.AssignmentProgressCreateNestedManyWithoutAssignmentInput
   course: Prisma.CourseCreateNestedOneWithoutAssignmentsInput
+  progress?: Prisma.AssignmentProgressCreateNestedManyWithoutAssignmentInput
 }
 
 export type AssignmentUncheckedCreateInput = {
@@ -292,8 +292,8 @@ export type AssignmentUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   duedate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  progress?: Prisma.AssignmentProgressUpdateManyWithoutAssignmentNestedInput
   course?: Prisma.CourseUpdateOneRequiredWithoutAssignmentsNestedInput
+  progress?: Prisma.AssignmentProgressUpdateManyWithoutAssignmentNestedInput
 }
 
 export type AssignmentUncheckedUpdateInput = {
@@ -596,8 +596,8 @@ export type AssignmentSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   title?: boolean
   description?: boolean
   duedate?: boolean
-  progress?: boolean | Prisma.Assignment$progressArgs<ExtArgs>
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
+  progress?: boolean | Prisma.Assignment$progressArgs<ExtArgs>
   _count?: boolean | Prisma.AssignmentCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["assignment"]>
 
@@ -629,8 +629,8 @@ export type AssignmentSelectScalar = {
 
 export type AssignmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "courseId" | "title" | "description" | "duedate", ExtArgs["result"]["assignment"]>
 export type AssignmentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  progress?: boolean | Prisma.Assignment$progressArgs<ExtArgs>
   course?: boolean | Prisma.CourseDefaultArgs<ExtArgs>
+  progress?: boolean | Prisma.Assignment$progressArgs<ExtArgs>
   _count?: boolean | Prisma.AssignmentCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type AssignmentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -643,8 +643,8 @@ export type AssignmentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.E
 export type $AssignmentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Assignment"
   objects: {
-    progress: Prisma.$AssignmentProgressPayload<ExtArgs>[]
     course: Prisma.$CoursePayload<ExtArgs>
+    progress: Prisma.$AssignmentProgressPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1046,8 +1046,8 @@ readonly fields: AssignmentFieldRefs;
  */
 export interface Prisma__AssignmentClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  progress<T extends Prisma.Assignment$progressArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Assignment$progressArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssignmentProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   course<T extends Prisma.CourseDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CourseDefaultArgs<ExtArgs>>): Prisma.Prisma__CourseClient<runtime.Types.Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  progress<T extends Prisma.Assignment$progressArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Assignment$progressArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssignmentProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.

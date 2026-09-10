@@ -25,7 +25,7 @@ export const getCourses = async (
                 }
             },
             orderBy:{
-                startTime:"asc"
+                code:"asc"
             }
         });
 

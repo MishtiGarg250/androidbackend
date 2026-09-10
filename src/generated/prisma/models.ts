@@ -10,8 +10,10 @@
  */
 export type * from './models/User.js'
 export type * from './models/Course.js'
+export type * from './models/CourseOffering.js'
 export type * from './models/Enrollment.js'
-export type * from './models/Attendance.js'
+export type * from './models/TimetableEntry.js'
 export type * from './models/Assignment.js'
 export type * from './models/AssignmentProgress.js'
+export type * from './models/Attendance.js'
 export type * from './commonInputTypes.js'

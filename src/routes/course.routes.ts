@@ -5,7 +5,6 @@ import {
     getCourseById,
 } from "../controllers/course.controller.js";
 import { authMiddleware } from "../middleware/auth.middleware.js";
-// import {authMiddleware} from "../middleware/auth.middleware.js"
 
 const router = Router();
 

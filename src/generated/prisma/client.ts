@@ -52,15 +52,20 @@ export type User = Prisma.UserModel
  */
 export type Course = Prisma.CourseModel
 /**
+ * Model CourseOffering
+ * 
+ */
+export type CourseOffering = Prisma.CourseOfferingModel
+/**
  * Model Enrollment
  * 
  */
 export type Enrollment = Prisma.EnrollmentModel
 /**
- * Model Attendance
+ * Model TimetableEntry
  * 
  */
-export type Attendance = Prisma.AttendanceModel
+export type TimetableEntry = Prisma.TimetableEntryModel
 /**
  * Model Assignment
  * 
@@ -71,3 +76,8 @@ export type Assignment = Prisma.AssignmentModel
  * 
  */
 export type AssignmentProgress = Prisma.AssignmentProgressModel
+/**
+ * Model Attendance
+ * 
+ */
+export type Attendance = Prisma.AttendanceModel

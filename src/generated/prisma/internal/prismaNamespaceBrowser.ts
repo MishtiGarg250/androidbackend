@@ -53,10 +53,12 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   User: 'User',
   Course: 'Course',
+  CourseOffering: 'CourseOffering',
   Enrollment: 'Enrollment',
-  Attendance: 'Attendance',
+  TimetableEntry: 'TimetableEntry',
   Assignment: 'Assignment',
-  AssignmentProgress: 'AssignmentProgress'
+  AssignmentProgress: 'AssignmentProgress',
+  Attendance: 'Attendance'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -80,10 +82,11 @@ export const UserScalarFieldEnum = {
   name: 'name',
   email: 'email',
   password: 'password',
-  createdAt: 'createdAt',
   rollNo: 'rollNo',
   branch: 'branch',
-  semester: 'semester'
+  semester: 'semester',
+  role: 'role',
+  createdAt: 'createdAt'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -93,13 +96,21 @@ export const CourseScalarFieldEnum = {
   id: 'id',
   name: 'name',
   code: 'code',
-  teacher: 'teacher',
-  room: 'room',
-  startTime: 'startTime',
-  endTime: 'endTime'
+  teacher: 'teacher'
 } as const
 
 export type CourseScalarFieldEnum = (typeof CourseScalarFieldEnum)[keyof typeof CourseScalarFieldEnum]
+
+
+export const CourseOfferingScalarFieldEnum = {
+  id: 'id',
+  courseId: 'courseId',
+  branch: 'branch',
+  semester: 'semester',
+  isRequired: 'isRequired'
+} as const
+
+export type CourseOfferingScalarFieldEnum = (typeof CourseOfferingScalarFieldEnum)[keyof typeof CourseOfferingScalarFieldEnum]
 
 
 export const EnrollmentScalarFieldEnum = {
@@ -111,15 +122,17 @@ export const EnrollmentScalarFieldEnum = {
 export type EnrollmentScalarFieldEnum = (typeof EnrollmentScalarFieldEnum)[keyof typeof EnrollmentScalarFieldEnum]
 
 
-export const AttendanceScalarFieldEnum = {
+export const TimetableEntryScalarFieldEnum = {
   id: 'id',
-  userId: 'userId',
-  courseId: 'courseId',
-  present: 'present',
-  date: 'date'
+  courseOfferingId: 'courseOfferingId',
+  dayOfWeek: 'dayOfWeek',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  room: 'room',
+  type: 'type'
 } as const
 
-export type AttendanceScalarFieldEnum = (typeof AttendanceScalarFieldEnum)[keyof typeof AttendanceScalarFieldEnum]
+export type TimetableEntryScalarFieldEnum = (typeof TimetableEntryScalarFieldEnum)[keyof typeof TimetableEntryScalarFieldEnum]
 
 
 export const AssignmentScalarFieldEnum = {
@@ -142,6 +155,17 @@ export const AssignmentProgressScalarFieldEnum = {
 } as const
 
 export type AssignmentProgressScalarFieldEnum = (typeof AssignmentProgressScalarFieldEnum)[keyof typeof AssignmentProgressScalarFieldEnum]
+
+
+export const AttendanceScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  courseId: 'courseId',
+  present: 'present',
+  date: 'date'
+} as const
+
+export type AttendanceScalarFieldEnum = (typeof AttendanceScalarFieldEnum)[keyof typeof AttendanceScalarFieldEnum]
 
 
 export const SortOrder = {

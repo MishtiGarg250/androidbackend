@@ -7,32 +7,55 @@ datasource db {
   provider = "postgresql"
 }
 
+enum UserRole {
+  STUDENT
+  FACULTY
+  ADMIN
+}
+
 model User {
-  id                 Int                  @id @default(autoincrement())
-  name               String
-  email              String               @unique
-  password           String
-  createdAt          DateTime             @default(now())
-  rollNo             String?              @unique
-  branch             String?
-  semester           Int?
+  id       Int      @id @default(autoincrement())
+  name     String
+  email    String   @unique
+  password String
+
+  rollNo   String?  @unique
+  branch   String?
+  semester Int?
+
+  role      UserRole @default(STUDENT)
+  createdAt DateTime @default(now())
+
   enrollments        Enrollment[]
   attendance         Attendance[]
   assignmentProgress AssignmentProgress[]
 }
 
 model Course {
-  id        Int    @id @default(autoincrement())
-  name      String
-  code      String @unique
-  teacher   String
-  room      String
-  startTime String
-  endTime   String
+  id      Int    @id @default(autoincrement())
+  name    String
+  code    String @unique
+  teacher String
 
+  offerings   CourseOffering[]
   enrollments Enrollment[]
-  attendance  Attendance[]
   assignments Assignment[]
+  attendance  Attendance[]
+}
+
+model CourseOffering {
+  id         Int     @id @default(autoincrement())
+  courseId   Int
+  branch     String
+  semester   Int
+  isRequired Boolean @default(true)
+
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  timetable TimetableEntry[]
+
+  @@unique([courseId, branch, semester])
+  @@index([branch, semester])
 }
 
 model Enrollment {
@@ -40,41 +63,73 @@ model Enrollment {
   userId   Int
   courseId Int
 
-  user   User   @relation(fields: [userId], references: [id])
-  course Course @relation(fields: [courseId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   @@unique([userId, courseId])
+  @@index([userId])
+  @@index([courseId])
+}
+
+model TimetableEntry {
+  id               Int    @id @default(autoincrement())
+  courseOfferingId Int
+
+  dayOfWeek Int
+  startTime String
+  endTime   String
+  room      String
+  type      String?
+
+  courseOffering CourseOffering @relation(fields: [courseOfferingId], references: [id], onDelete: Cascade)
+
+  @@index([courseOfferingId, dayOfWeek])
+  @@index([dayOfWeek, startTime])
+}
+
+model Assignment {
+  id       Int      @id @default(autoincrement())
+  courseId Int
+
+  title       String
+  description String?
+  duedate     DateTime
+
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  progress AssignmentProgress[]
+
+  @@index([courseId])
+  @@index([duedate])
+}
+
+model AssignmentProgress {
+  id           Int      @id @default(autoincrement())
+  userId       Int
+  assignmentId Int
+
+  completed   Boolean  @default(false)
+  completedAt DateTime?
+
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  assignment Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, assignmentId])
+  @@index([userId])
+  @@index([assignmentId])
 }
 
 model Attendance {
   id       Int      @id @default(autoincrement())
   userId   Int
   courseId Int
-  present  Boolean
-  date     DateTime @default(now())
+
+  present Boolean
+  date    DateTime @default(now())
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
-}
 
-model Assignment {
-  id          Int                  @id @default(autoincrement())
-  courseId    Int
-  title       String
-  description String?
-  duedate     DateTime
-  progress    AssignmentProgress[]
-  course      Course               @relation(fields: [courseId], references: [id])
-}
-
-model AssignmentProgress {
-  id           Int        @id @default(autoincrement())
-  userId       Int
-  assignmentId Int
-  completed    Boolean    @default(false)
-  completedAt  DateTime?
-  user         User       @relation(fields: [userId], references: [id])
-  assignment   Assignment @relation(fields: [assignmentId], references: [id])
-
-  @@unique([userId, assignmentId])
+  @@index([userId, courseId])
+  @@index([courseId, date])
 }
